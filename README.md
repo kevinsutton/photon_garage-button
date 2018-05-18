@@ -1,1 +1,1 @@
-# photon_garage-button
+# Particle Photon - Internet Connected Garage Door Status & Controller
