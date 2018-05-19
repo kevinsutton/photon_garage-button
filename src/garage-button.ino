@@ -14,12 +14,17 @@ void setup() {
   initializeDoorRight();
   initializeUnused();
 
-  notifyDoorLeftOpen();
-  initializeDoorLeft();
-  notifyDoorMiddleOpen();
-  initializeDoorMiddle();
-  notifyDoorRightOpen();
-  initializeDoorRight();
+  // notifyDoorLeftOpen();
+  // initializeDoorLeft();
+  // notifyDoorMiddleOpen();
+  // initializeDoorMiddle();
+  // notifyDoorRightOpen();
+  // initializeDoorRight();
+
+  // Subscribe to Garage Door Events
+  Particle.subscribe("DOOR_LEFT", eventDoorLeft, MY_DEVICES);
+  Particle.subscribe("DOOR_MIDDLE", eventDoorMiddle, MY_DEVICES);
+  Particle.subscribe("DOOR_RIGHT", eventDoorRight, MY_DEVICES);
 
   // Define Cloud variables
   // Particle.variable("DOOR_LEFT", sd1);
@@ -147,13 +152,13 @@ int notifyDoorLeftOpen() {
     b.ledOn(1, 255, 128, 0); // Orange
     b.ledOn(2, 255, 0, 0); // Red
     b.ledOn(3, 255, 128, 0); // Orange
-    delay(500);
+    delay(100);
 
     // Switch Colors
     b.ledOn(1, 255, 0, 0); // Orange
     b.ledOn(2, 255, 128, 0); // Red
     b.ledOn(3, 255, 0, 0); // Orange
-    delay(500);
+    delay(100);
   }
 
   //End in Open State
@@ -170,17 +175,17 @@ int notifyDoorMiddleOpen() {
     b.ledOn(5, 0, 255, 0); // Green
     b.ledOn(6, 255, 0, 0); // Red
     b.ledOn(7, 0, 255, 0); // Green
-    delay(500);
+    delay(100);
 
     // Switch Colors
     b.ledOn(5, 255, 0, 0); // Red
     b.ledOn(6, 0, 255, 0); // Green
     b.ledOn(7, 255, 0, 0); // Red
-    delay(500);
+    delay(100);
   }
 
   //End in Open State
-  b.ledOn(6, 0, 255, 0); // Green
+  b.ledOn(5, 0, 255, 0); // Green
   b.ledOn(6, 255, 0, 0); // Red
   b.ledOn(7, 0, 255, 0); // Green
 
@@ -193,13 +198,13 @@ int notifyDoorRightOpen() {
     b.ledOn(9, 255, 255, 0); // Yellow
     b.ledOn(10, 255, 0, 0); // Red
     b.ledOn(11, 255, 255, 0); // Yellow
-    delay(500);
+    delay(100);
 
     // Switch Colors
     b.ledOn(9, 255, 0, 0); // Red
     b.ledOn(10, 255, 255, 0); // Yellow
     b.ledOn(11, 255, 0, 0); // Red
-    delay(500);
+    delay(100);
   }
 
   //End in Open State
@@ -208,4 +213,52 @@ int notifyDoorRightOpen() {
   b.ledOn(11, 255, 255, 0); // Yellow
 
   return 1;
+}
+
+void eventDoorLeft(const char *event, const char *data)
+{
+  if (strcmp(data,"OPEN")==0) {
+    // Garage Door is OPEN, Notify
+    notifyDoorLeftOpen();
+  }
+  else if (strcmp(data,"CLOSED")==0) {
+    // Garage Door is CLOSED, Reset
+    initializeDoorLeft();
+  }
+  else {
+    // if the data is something else, don't do anything.
+    // Really the data shouldn't be anything but those two listed above.
+  }
+}
+
+void eventDoorMiddle(const char *event, const char *data)
+{
+  if (strcmp(data,"OPEN")==0) {
+    // Garage Door is OPEN, Notify
+    notifyDoorMiddleOpen();
+  }
+  else if (strcmp(data,"CLOSED")==0) {
+    // Garage Door is CLOSED, Reset
+    initializeDoorMiddle();
+  }
+  else {
+    // if the data is something else, don't do anything.
+    // Really the data shouldn't be anything but those two listed above.
+  }
+}
+
+void eventDoorRight(const char *event, const char *data)
+{
+  if (strcmp(data,"OPEN")==0) {
+    // Garage Door is OPEN, Notify
+    notifyDoorRightOpen();
+  }
+  else if (strcmp(data,"CLOSED")==0) {
+    // Garage Door is CLOSED, Reset
+    initializeDoorRight();
+  }
+  else {
+    // if the data is something else, don't do anything.
+    // Really the data shouldn't be anything but those two listed above.
+  }
 }
